@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'blog_post_show' %}
+
+{% block body %}
+    <h1>Lorem ipsum dolor sit amet consectetur adipiscing elit</h1>
+
+    <p class="post-metadata">
+        <span class="metadata"><i class="fa fa-calendar"></i> December 5, 2017 at 4:36:43 PM</span>
+        <span class="metadata"><i class="fa fa-user"></i> Jane Doe</span>
+    </p>
+
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et <strong>dolore magna aliqua</strong>: Duis aute irure dolor in
+        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+        deserunt mollit anim id est laborum.</p>
+    <ul>
+        <li>Ut enim ad minim veniam</li>
+        <li>Quis nostrud exercitation <em>ullamco laboris</em></li>
+        <li>Nisi ut aliquip ex ea commodo consequat</li>
+    </ul>
+    <p>Praesent id fermentum lorem. Ut est lorem, fringilla at accumsan nec, euismod at
+        nunc. Aenean mattis sollicitudin mattis. Nullam pulvinar vestibulum bibendum.
+        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+        himenaeos. Fusce nulla purus, gravida ac interdum ut, blandit eget ex. Duis a
+        luctus dolor.</p>
+    <p>Integer auctor massa maximus nulla scelerisque accumsan. <em>Aliquam ac malesuada</em>
+        ex. Pellentesque tortor magna, vulputate eu vulputate ut, venenatis ac lectus.
+        Praesent ut lacinia sem. Mauris a lectus eget felis mollis feugiat. Quisque
+        efficitur, mi ut semper pulvinar, urna urna blandit massa, eget tincidunt augue
+        nulla vitae est.</p>
+    <p>Ut posuere aliquet tincidunt. Aliquam erat volutpat. <strong>Class aptent taciti</strong>
+        sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi
+        arcu orci, gravida eget aliquam eu, suscipit et ante. Morbi vulputate metus vel
+        ipsum finibus, ut dapibus massa feugiat. Vestibulum vel lobortis libero. Sed
+        tincidunt tellus et viverra scelerisque. Pellentesque tincidunt cursus felis.
+        Sed in egestas erat.</p>
+    <p>Aliquam pulvinar interdum massa, vel ullamcorper ante consectetur eu. Vestibulum
+        lacinia ac enim vel placerat. Integer pulvinar magna nec dui malesuada, nec
+        congue nisl dictum. Donec mollis nisl tortor, at congue erat consequat a. Nam
+        tempus elit porta, blandit elit vel, viverra lorem. Sed sit amet tellus
+        tincidunt, faucibus nisl in, aliquet libero.</p>
+
+    <p class="post-tags">
+        <a href="/?tag=adipiscing"
+           class="label label-default"
+        >
+            <i class="fa fa-tag"></i> adipiscing
+        </a>
+        <a href="/?tag=consectetur"
+           class="label label-default"
+        >
+            <i class="fa fa-tag"></i> consectetur
+        </a>
+        <a href="/?tag=labore"
+           class="label label-default"
+        >
+            <i class="fa fa-tag"></i> labore
+        </a>
+        <a href="/?tag=voluptate"
+           class="label label-default"
+        >
+            <i class="fa fa-tag"></i> voluptate
+        </a>
+    </p>
+
+    <div id="post-add-comment" class="well">
+        <p>
+            <a class="btn btn-success" href="/login">
+                <i class="fa fa-sign-in" aria-hidden="true"></i> Zaloguj się
+            </a>
+            aby dodać komentarz
+        </p>
+    </div>
+
+    <h3>
+        <i class="fa fa-comments" aria-hidden="true"></i> 5 komentarzy
+    </h3>
+
+    <div class="row post-comment">
+        <a name="comment_5"></a>
+        <h4 class="col-sm-3">
+            <strong>John Doe</strong> commented on
+            <strong>Dec 5, 2017, 4:36 PM</strong>
+        </h4>
+        <div class="col-sm-9">
+            <p>Diatrias tolerare tanquam noster caesium. Pellentesque vitae velit ex. Ubi est barbatus nix. Sunt seculaes transferre talis camerarius fluctuies. Bassus fatalis classiss virtualiter transferre de flavum. Sunt torquises imitari velox mirabilis medicinaes. Silva de secundus galatae demitto quadra. Ut eleifend mauris et risus ultrices egestas.</p>
+        </div>
+    </div>
+    <div class="row post-comment">
+        <a name="comment_4"></a>
+        <h4 class="col-sm-3">
+            <strong>John Doe</strong> commented on
+            <strong>Dec 5, 2017, 4:36 PM</strong>
+        </h4>
+        <div class="col-sm-9">
+            <p>Ut eleifend mauris et risus ultrices egestas. Era brevis ratione est. Potus sensim ad ferox abnoba. Nunc viverra elit ac laoreet suscipit. Ut suscipit posuere justo at vulputate. Teres talis saepe tractare de camerarius flavum sensorem. Aliquam sodales odio id eleifend tristique. Sunt seculaes transferre talis camerarius fluctuies. Sunt torquises imitari velox mirabilis medicinaes. Eposs sunt solems de superbus fortis. Sunt accentores vitare salvus flavum parses.</p>
+        </div>
+    </div>
+    <div class="row post-comment">
+        <a name="comment_3"></a>
+        <h4 class="col-sm-3">
+            <strong>John Doe</strong> commented on
+            <strong>Dec 5, 2017, 4:36 PM</strong>
+        </h4>
+        <div class="col-sm-9">
+            <p>Sunt accentores vitare salvus flavum parses. Urna nisl sollicitudin id varius orci quam id turpis. Potus sensim ad ferox abnoba. Silva de secundus galatae demitto quadra. Eros diam egestas libero eu vulputate risus. Pellentesque et sapien pulvinar consectetur.</p>
+        </div>
+    </div>
+    <div class="row post-comment">
+        <a name="comment_2"></a>
+        <h4 class="col-sm-3">
+            <strong>John Doe</strong> commented on
+            <strong>Dec 5, 2017, 4:36 PM</strong>
+        </h4>
+        <div class="col-sm-9">
+            <p>Curabitur aliquam euismod dolor non ornare. Mauris dapibus risus quis suscipit vulputate. Pellentesque et sapien pulvinar consectetur. Ut suscipit posuere justo at vulputate. Nunc viverra elit ac laoreet suscipit. Aliquam sodales odio id eleifend tristique. Vae humani generis. Silva de secundus galatae demitto quadra. Ubi est barbatus nix.</p>
+        </div>
+    </div>
+    <div class="row post-comment">
+        <a name="comment_1"></a>
+        <h4 class="col-sm-3">
+            <strong>John Doe</strong> commented on
+            <strong>Dec 5, 2017, 4:36 PM</strong>
+        </h4>
+        <div class="col-sm-9">
+            <p>Eros diam egestas libero eu vulputate risus. Aliquam sodales odio id eleifend tristique. Nulla porta lobortis ligula vel egestas. Eposs sunt solems de superbus fortis. Sunt torquises imitari velox mirabilis medicinaes. Lorem ipsum dolor sit amet consectetur adipiscing elit. Sunt seculaes transferre talis camerarius fluctuies.</p>
+        </div>
+    </div>
+{% endblock %}

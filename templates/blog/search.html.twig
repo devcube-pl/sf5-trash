@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'blog_search' %}
+
+{% block body %}
+    <h4>Wpisz szukaną frazę</h4>
+
+    <form action="/search" method="get">
+        <div class="form-group">
+            <input name="q"
+                   class="form-control search-field"
+                   placeholder="Poszukaj czegoś..."
+                   autocomplete="off"
+                   value=""
+                   autofocus
+                   data-no-results-message="Nic nie znaleziono..."
+            >
+        </div>
+    </form>
+
+    <div id="results">
+    </div>
+{% endblock %}

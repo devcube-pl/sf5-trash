@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{% block title %}Symfony 5 - Szkolenie{% endblock %}</title>
+    <link rel="stylesheet" href="/build/app.css" />
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+    {% block stylesheets %}
+        {#{{ encore_entry_link_tags('app') }}#}
+    {% endblock %}
+
+    {% block javascripts %}
+        {#{{ encore_entry_script_tags('app') }}#}
+    {% endblock %}
+</head>
+<body id="{% block body_id %}{% endblock %}">
+
+<header>
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header col-md-3 col-lg-2">
+                <a class="navbar-brand" href="/">
+                    Szkolenie SF5
+                </a>
+
+                <button type="button" class="navbar-toggle"
+                        data-toggle="collapse"
+                        data-target=".navbar-collapse">
+                    <span class="sr-only">Przełącz nawigację</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+
+                    <li>
+                        <a href="/">
+                            <i class="fa fa-home" aria-hidden="true"></i> Strona główna
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/login">
+                            <i class="fa fa-user" aria-hidden="true"></i> Logowanie
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/search"> <i class="fa fa-search"></i> Szukajka</a>
+                    </li>
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="locales">
+                            <i class="fa fa-globe" aria-hidden="true"></i>
+                            <span class="caret"></span>
+                            <span class="sr-only">Wybierz język</span>
+                        </a>
+                        <ul class="dropdown-menu locales" role="menu" aria-labelledby="locales">
+                            <li aria-checked="false" role="menuitem"><a href="/en/">English <small>en</small></a></li>
+                            <li aria-checked="true" class="active" role="menuitem"><a href="/pl/">Polski <small>pl</small></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container body-container">
+    <div class="row">
+        <div id="main" class="col-sm-12">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div id="footer-copyright" class="col-md-6">
+                <p>&copy; 2021 - The Symfony Project</p>
+                <p>Licencja MIT</p>
+            </div>
+            <div id="footer-resources" class="col-md-6">
+                <p>
+                    <a href="https://twitter.com/symfony" title="Symfony Twitter">
+                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://www.facebook.com/SensioLabs" title="SensioLabs Facebook">
+                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://symfony.com/blog/" title="Symfony Blog">
+                        <i class="fa fa-rss" aria-hidden="true"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="/build/runtime.js"></script>
+<script src="/build/0.js"></script>
+<script src="/build/1.js"></script>
+<script src="/build/app.js"></script>
+</body>
+</html>
