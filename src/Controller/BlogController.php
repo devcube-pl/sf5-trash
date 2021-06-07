@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,14 @@ class BlogController extends AbstractController
      * @Route("/page/{page<[1-9]\d*>}", defaults={"_format"="html"}, methods="GET", name="blog_index_paginated")
      * @return Response
      */
-    public function index()
+    public function index(PostRepository $postRepository)
     {
+        $posts = $postRepository->findLatest();
+//        dump($posts);
+
         return $this->render(
-            'blog/index.html.twig'
+            'blog/index.html.twig',
+            ['posts' => $posts]
         );
     }
 

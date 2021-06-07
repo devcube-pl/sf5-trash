@@ -5,17 +5,17 @@
 {% block body %}
     <div class="messages">
     </div>
-
+    {% for post in posts %}
     <article class="post">
         <h2>
-            <a href="/posts/lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit
+            <a href="{{ path('blog_post', {slug: post.slug}) }}">
+                {{ post.title }}
             </a>
         </h2>
 
         <p class="post-metadata">
-            <span class="metadata"><i class="fa fa-calendar"></i> 5 grudnia 2017 16:36:43</span>
-            <span class="metadata"><i class="fa fa-user"></i> Jane Doe</span>
+            <span class="metadata"><i class="fa fa-calendar"></i> {{ post.publishedAt|date }} </span>
+            <span class="metadata"><i class="fa fa-user"></i> Jane Doe2s</span>
         </p>
 
         <p>Ut suscipit posuere justo at vulputate. Aliquam sodales odio id eleifend tristique. Potus sensim ad ferox abnoba. Teres talis saepe tractare de camerarius flavum sensorem. Silva de secundus galatae demitto quadra.</p>
@@ -43,48 +43,8 @@
             </a>
         </p>
 
-
     </article>
-    <article class="post">
-        <h2>
-            <a href="/posts/pellentesque-vitae-velit-ex">
-                Pellentesque vitae velit ex
-            </a>
-        </h2>
-
-        <p class="post-metadata">
-            <span class="metadata"><i class="fa fa-calendar"></i> 4 grudnia 2017 16:36:43</span>
-            <span class="metadata"><i class="fa fa-user"></i> Jane Doe</span>
-        </p>
-
-        <p>Ubi est barbatus nix. Lorem ipsum dolor sit amet consectetur adipiscing elit. Urna nisl sollicitudin id varius orci quam id turpis. Curabitur aliquam euismod dolor non ornare. Bassus fatalis classiss virtualiter transferre de flavum.</p>
-
-        <p class="post-tags">
-            <a href="/?tag=consectetur"
-               class="label label-default"
-            >
-                <i class="fa fa-tag"></i> consectetur
-            </a>
-            <a href="/?tag=incididunt"
-               class="label label-default"
-            >
-                <i class="fa fa-tag"></i> incididunt
-            </a>
-            <a href="/?tag=lorem"
-               class="label label-default"
-            >
-                <i class="fa fa-tag"></i> lorem
-            </a>
-            <a href="/?tag=voluptate"
-               class="label label-default"
-            >
-                <i class="fa fa-tag"></i> voluptate
-            </a>
-        </p>
-
-
-    </article>
-
+    {% endfor %}
     <div class="navigation text-center">
         <ul class="pagination">
             <li class="prev disabled"><span><i class="fa fw fa-arrow-left"></i> Poprzednia</span></li>

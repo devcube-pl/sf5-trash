@@ -19,6 +19,16 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
+    public function findLatest()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.publishedAt <= :now')
+            ->orderBy('p.publishedAt', 'DESC')
+            ->setParameter('now', new \DateTime());
+
+        return $qb->getQuery()->execute();
+    }
+
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */
