@@ -11,18 +11,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class BlogController extends AbstractController
 {
     /**
-     * @Route("/", name="homepage")
-     * @Route("/page/{page<[1-9]\d*>}", defaults={"_format"="html"}, methods="GET", name="blog_index_paginated")
+     * @Route("/", defaults={"page":"1"}, name="homepage")
+     * @Route("/page/{page<[1-9]\d*>}", defaults={"page":"1"}, methods="GET", name="blog_index_paginated")
      * @return Response
      */
-    public function index(PostRepository $postRepository)
+    public function index(PostRepository $postRepository, $page)
     {
-        $posts = $postRepository->findLatest();
+        $paginator = $postRepository->findLatest($page);
 //        dump($posts);
 
         return $this->render(
             'blog/index.html.twig',
-            ['posts' => $posts]
+            ['paginator' => $paginator]
         );
     }
 
