@@ -23,6 +23,8 @@ class PostRepository extends ServiceEntityRepository
     public function findLatest(int $page)
     {
         $qb = $this->createQueryBuilder('p')
+            ->addSelect('a')
+            ->innerJoin('p.author', 'a')
             ->where('p.publishedAt <= :now')
             ->orderBy('p.publishedAt', 'DESC')
             ->setParameter('now', new \DateTime());

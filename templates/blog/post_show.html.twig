@@ -7,7 +7,7 @@
 
     <p class="post-metadata">
         <span class="metadata"><i class="fa fa-calendar"></i> {{ post.publishedAt|format_post_date }}</span>
-        <span class="metadata"><i class="fa fa-user"></i> Jane Doe</span>
+        <span class="metadata"><i class="fa fa-user"></i> {{ post.author.fullName }}</span>
     </p>
 
     {{ post.content|markdown_to_html|sanitize_html }}

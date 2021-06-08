@@ -15,7 +15,7 @@
 
         <p class="post-metadata">
             <span class="metadata"><i class="fa fa-calendar"></i> {{ post.publishedAt|format_post_date('d/m/y H:i') }} </span>
-            <span class="metadata"><i class="fa fa-user"></i> Jane Doe</span>
+            <span class="metadata"><i class="fa fa-user"></i> {{ post.author.fullName }}</span>
         </p>
 
         <p>{{ post.summary }}</p>

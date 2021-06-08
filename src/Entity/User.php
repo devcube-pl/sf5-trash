@@ -8,10 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+// DON'T forget the following use statement!!!
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @UniqueEntity("email", message="Posiadasz już konto w naszym serwisie, weź się zaloguj gościu")
+ * @UniqueEntity("username", message="Podana nazwa user jest już zajęta")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -24,16 +29,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=2, max=50)
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=180)
+     * @Assert\Email()
      */
     private $email;
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\Length(min=3, max=100)
      * @var string
      */
     private $fullName;
@@ -46,6 +57,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     * @Assert\Length(min=6, max=4096)
      */
     private $password;
 
