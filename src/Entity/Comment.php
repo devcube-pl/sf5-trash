@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as AppAssert;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
+ * @AppAssert\AntiFlood(limit=2)
  */
 class Comment
 {
