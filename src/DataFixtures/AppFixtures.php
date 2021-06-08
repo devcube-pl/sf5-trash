@@ -4,11 +4,12 @@ namespace App\DataFixtures;
 
 use App\Entity\Post;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use function Symfony\Component\String\u;
 
-class AppFixtures extends Fixture
+class AppFixtures extends Fixture implements DependentFixtureInterface
 {
     /**
      * @var SluggerInterface
@@ -29,15 +30,23 @@ class AppFixtures extends Fixture
         $this->loadPosts($manager);
     }
 
+    public function getDependencies()
+    {
+        return [
+            UserFixtures::class,
+        ];
+    }
+
     private function loadPosts(ObjectManager $manager): void
     {
-        foreach ($this->getPostData() as [$title, $slug, $summary, $content, $publishedAt]) {
+        foreach ($this->getPostData() as [$title, $slug, $summary, $content, $publishedAt, $author]) {
             $post = new Post();
             $post->setTitle($title);
             $post->setSlug($slug);
             $post->setSummary($summary);
             $post->setContent($content);
             $post->setPublishedAt($publishedAt);
+            $post->setAuthor($author);
 
             $manager->persist($post);
         }
@@ -56,7 +65,8 @@ class AppFixtures extends Fixture
                 $this->slugger->slug($title)->lower(),
                 $this->getRandomText(),
                 $this->getPostContent(),
-                new \DateTime('now - '.$i.'days')
+                new \DateTime('now - '.$i.'days'),
+                $this->getReference(['jan_admin', 'tom_admin', 'kate_admin'][0 === $i ? 0 : random_int(0, 2)]),
             ];
         }
 
