@@ -109,6 +109,8 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
                 $this->getRandomText(),
                 $this->getPostContent(),
                 new \DateTime('now - '.$i.'days'),
+                // ten zapis 0 === $i jest pod testy, aby autorem pierwszego posta byl zawsze jan_admin
+                // @see BlogControllerTest::testAjaxSearch
                 $this->getReference(['jan_admin', 'tom_admin', 'kate_admin'][0 === $i ? 0 : random_int(0, 2)]),
                 $this->getRandomTags(),
             ];

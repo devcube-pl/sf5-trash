@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Pagination\Paginator;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class BlogControllerTest extends WebTestCase
 {
@@ -49,5 +50,32 @@ class BlogControllerTest extends WebTestCase
         $newComment = $crawler->filter('.post-comment')->last()->filter('div > p')->text();
 
         $this->assertSame($commentText, $newComment);
+    }
+
+    public function testCommentFormAccessDeniedForAnonymousUser(): void
+    {
+        $client = static::createClient();
+        $client->request('POST', '/comment/pellentesque-vitae-velit-ex/new');
+
+        // sprawdz czy jest przekierowania na logowanie
+
+        $this->assertResponseRedirects(
+            'http://localhost/login',
+            Response::HTTP_FOUND,
+            'Dodanie komentarza mozliwe tylko dla zalogowanych'
+        );
+    }
+
+    public function testAjaxSearch(): void
+    {
+        $client = static::createClient();
+        $client->xmlHttpRequest('GET', '/pl/search', ['q' => 'lorem']);
+
+        $results = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+        $this->assertCount(1, $results);
+        $this->assertSame('Lorem ipsum dolor sit amet consectetur adipiscing elit', $results[0]['title']);
+        $this->assertSame('Jan Kowalski', $results[0]['author']);
     }
 }
