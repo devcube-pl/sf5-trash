@@ -9,7 +9,8 @@ use App\Validator as AppAssert;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
- * @AppAssert\AntiFlood(limit=2)
+ * @AppAssert\AntiFlood(limit=2, groups={"Strict"})
+ * @Assert\GroupSequence({"Comment", "Strict"})
  */
 class Comment
 {
