@@ -4,4 +4,8 @@
 
 {% block body %}
     <h4 class="text-danger">Wystąpił błąd podczas publikacji formularza</h4>
+
+    <div class="well">
+        {{ include('blog/_comment_form.html.twig') }}
+    </div>
 {% endblock %}

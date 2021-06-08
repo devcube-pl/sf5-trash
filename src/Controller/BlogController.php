@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class BlogController extends AbstractController
 {
@@ -40,11 +42,9 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/comment/{postSlug/new", methods="POST", name="comment_new")
+     * @Route("/comment/{postSlug}/new", methods="POST", name="comment_new")
      * @IsGranted("IS_AUTHENTICATED_FULLY")
      * @ParamConverter("post", options={"mapping": {"postSlug": "slug"}})
-     * @param  Request  $request
-     * @param  Post  $post
      */
     public function commentNew(Request $request, Post $post)
     {
@@ -65,15 +65,25 @@ class BlogController extends AbstractController
             return $this->redirectToRoute('blog_post', ['slug' => $post->getSlug()]);
         }
 
-        // moze jednak nie bedziemy przekierowywac tylko zrobimy osobny widok
-        $this->renderForm(
+        return $this->renderForm(
             'blog/comment_form_error.html.twig',
             [
-                'form' => $form
+                'form' => $form,
+                'post' => $post
             ]
         );
     }
 
+    public function commentForm(Post $post)
+    {
+        return $this->renderForm(
+            'blog/_comment_form.html.twig',
+            [
+                'form' => $this->createForm(CommentType::class),
+                'post' => $post
+            ]
+        );
+    }
 
     /**
      * @Route("/search")

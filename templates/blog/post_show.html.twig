@@ -36,12 +36,16 @@
     </p>
 
     <div id="post-add-comment" class="well">
+        {% if app.user %}
+            {{ render(controller('App\\Controller\\BlogController::commentForm', { 'id': post.id })) }}
+        {%  else %}
         <p>
-            <a class="btn btn-success" href="/login">
+            <a class="btn btn-success" href="{{ path('security_login') }}">
                 <i class="fa fa-sign-in" aria-hidden="true"></i> Zaloguj się
             </a>
             aby dodać komentarz
         </p>
+        {% endif %}
     </div>
 
     <h3>
