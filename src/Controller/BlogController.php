@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Form\CommentType;
 use App\Repository\PostRepository;
+use App\Repository\TagRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +21,14 @@ class BlogController extends AbstractController
      * @Route("/page/{page<[1-9]\d*>}", defaults={"page":"1"}, methods="GET", name="blog_index_paginated")
      * @return Response
      */
-    public function index(PostRepository $postRepository, $page)
+    public function index(Request $request, PostRepository $postRepository, TagRepository $tags, $page)
     {
-        $paginator = $postRepository->findLatest($page);
+        $tag = null;
+        if ($request->query->has('tag')) {
+            $tag = $tags->findOneBy(['name' => $request->query->get('tag')]);
+        }
+
+        $paginator = $postRepository->findLatest($page, $tag);
 
         return $this->render(
             'blog/index.html.twig',
@@ -33,12 +39,18 @@ class BlogController extends AbstractController
     /**
      * @Route("/posts/{slug}", name="blog_post")
      */
-    public function postShow(Post $post, Request $req)
+    public function postShow(PostRepository $postRepository, string $slug): Response
     {
-        return $this->render(
-            'blog/post_show.html.twig',
-            ['post' => $post]
-        );
+        /*
+         * Dwie opcje pobrania encji Post:
+         * - metoda w repozytorium
+         * - paramConverter https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
+         */
+        $post = $this->getDoctrine()->getRepository(Post::class)
+            ->getPostWithComments($slug);
+
+        //$id = $request->query->get('id'); // pobieranie z query ?id=
+        return $this->render('blog/post_show.html.twig', ['post' => $post]);
     }
 
     /**
@@ -86,11 +98,30 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/search")
-     * @return Response
+     * @Route("/search", methods="GET", name="search")
      */
-    public function search()
+    public function search(Request $request, PostRepository $posts): Response
     {
-        return $this->render('blog/search.html.twig');
+        $query = $request->query->get('q', '');
+        $limit = $request->query->get('l', 10);
+
+        if (!$request->isXmlHttpRequest()) {
+            return $this->render('blog/search.html.twig', ['query' => $query]);
+        }
+
+        $foundPosts = $posts->findBySearchQuery($query, $limit);
+
+        $results = [];
+        foreach ($foundPosts as $post) {
+            $results[] = [
+                'title' => htmlspecialchars($post->getTitle(), ENT_COMPAT | ENT_HTML5),
+                'date' => $post->getPublishedAt()->format('M d, Y'),
+                'author' => htmlspecialchars($post->getAuthor()->getFullName(), ENT_COMPAT | ENT_HTML5),
+                'summary' => htmlspecialchars($post->getSummary(), ENT_COMPAT | ENT_HTML5),
+                'url' => $this->generateUrl('blog_post', ['slug' => $post->getSlug()]),
+            ];
+        }
+
+        return $this->json($results);
     }
 }

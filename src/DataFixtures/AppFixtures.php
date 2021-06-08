@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -27,6 +29,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
+        $this->loadTags($manager);
         $this->loadPosts($manager);
     }
 
@@ -37,9 +40,22 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
+    private function loadTags(ObjectManager $manager): void
+    {
+        foreach ($this->getTagData() as $index => $name) {
+            $tag = new Tag();
+            $tag->setName($name);
+
+            $manager->persist($tag);
+            $this->addReference('tag-'.$name, $tag);
+        }
+
+        $manager->flush();
+    }
+
     private function loadPosts(ObjectManager $manager): void
     {
-        foreach ($this->getPostData() as [$title, $slug, $summary, $content, $publishedAt, $author]) {
+        foreach ($this->getPostData() as [$title, $slug, $summary, $content, $publishedAt, $author, $tags]) {
             $post = new Post();
             $post->setTitle($title);
             $post->setSlug($slug);
@@ -47,11 +63,38 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             $post->setContent($content);
             $post->setPublishedAt($publishedAt);
             $post->setAuthor($author);
+            $post->addTag(...$tags);
+
+            if (random_int(1, 8) != 4) {
+                foreach (range(0, random_int(1, 4)) as $i) {
+                    $comment = new Comment();
+                    $comment->setAuthor($this->getReference(UserFixtures::getRandomUserReferenceId()));
+                    $comment->setPost($post);
+                    $comment->setContent($this->getRandomText(500));
+                    $comment->setPublishedAt(new \DateTime());
+                    $post->addComment($comment);
+                }
+            }
 
             $manager->persist($post);
         }
 
         $manager->flush();
+    }
+
+    private function getTagData(): array
+    {
+        return [
+            'lorem',
+            'ipsum',
+            'consectetur',
+            'adipiscing',
+            'incididunt',
+            'labore',
+            'voluptate',
+            'dolore',
+            'pariatur',
+        ];
     }
 
     private function getPostData()
@@ -67,6 +110,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
                 $this->getPostContent(),
                 new \DateTime('now - '.$i.'days'),
                 $this->getReference(['jan_admin', 'tom_admin', 'kate_admin'][0 === $i ? 0 : random_int(0, 2)]),
+                $this->getRandomTags(),
             ];
         }
 
@@ -84,6 +128,15 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
         } while ($text->length() > $maxLength);
 
         return $text;
+    }
+
+    private function getRandomTags(): array
+    {
+        $tagNames = $this->getTagData();
+        shuffle($tagNames);
+        $selectedTags = \array_slice($tagNames, 0, random_int(2, 4));
+
+        return array_map(function ($tagName) { return $this->getReference('tag-'.$tagName); }, $selectedTags);
     }
 
     private function getPhrases(): array

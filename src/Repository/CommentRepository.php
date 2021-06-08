@@ -19,6 +19,24 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
+    /**
+     * @param  int  $postId
+     * @param  int  $limit
+     * @return int|mixed|string
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getLastCommentForPost(int $postId, int $limit)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.post = :postId')
+            ->setParameter('postId', $postId)
+            ->orderBy('c.publishedAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */

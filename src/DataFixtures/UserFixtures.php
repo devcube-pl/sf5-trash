@@ -40,6 +40,15 @@ class UserFixtures extends Fixture
         ];
     }
 
+    public static function getRandomUserReferenceId()
+    {
+        $ids = [];
+        foreach (self::getUserData() as $data) {
+            $ids[] = $data[1];
+        }
+        return $ids[random_int(0, count($ids)-1)];
+    }
+
     private function loadUsers(ObjectManager $manager): void
     {
         foreach (self::getUserData() as [$fullname, $username, $password, $email, $roles]) {

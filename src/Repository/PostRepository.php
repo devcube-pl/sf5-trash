@@ -3,9 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Entity\Tag;
 use App\Pagination\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+
+use function Symfony\Component\String\u;
 
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,7 +23,7 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function findLatest(int $page)
+    public function findLatest(int $page, Tag $tag = null)
     {
         $qb = $this->createQueryBuilder('p')
             ->addSelect('a')
@@ -29,35 +32,66 @@ class PostRepository extends ServiceEntityRepository
             ->orderBy('p.publishedAt', 'DESC')
             ->setParameter('now', new \DateTime());
 
+        if (null !== $tag) {
+            $qb->andWhere(':tag MEMBER OF p.tags')
+                ->setParameter('tag', $tag);
+        }
+
         return (new Paginator($qb))->paginate($page);
     }
 
-    // /**
-    //  * @return Post[] Returns an array of Post objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getPostWithComments(string $slug)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('p')
+            ->addSelect('a', 'c', 'ca')
+            ->innerJoin('p.author', 'a')
+            ->leftJoin('p.comments', 'c')
+            ->leftJoin('c.author', 'ca')
+            ->where('p.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->orderBy('c.publishedAt', 'ASC');
 
-    /*
-    public function findOneBySomeField($value): ?Post
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $qb->getQuery()->getSingleResult();
     }
-    */
+
+    /**
+     * @return Post[]
+     */
+    public function findBySearchQuery(string $query, int $limit = Paginator::PAGE_SIZE): array
+    {
+        $searchTerms = $this->extractSearchTerms($query);
+
+        if (0 === \count($searchTerms)) {
+            return [];
+        }
+
+        $queryBuilder = $this->createQueryBuilder('p');
+
+        foreach ($searchTerms as $key => $term) {
+            $queryBuilder
+                ->orWhere('p.title LIKE :t_'.$key)
+                ->setParameter('t_'.$key, '%'.$term.'%')
+            ;
+        }
+
+        return $queryBuilder
+            ->orderBy('p.publishedAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Transforms the search string into an array of search terms.
+     */
+    private function extractSearchTerms(string $searchQuery): array
+    {
+        $searchQuery = u($searchQuery)->replaceMatches('/[[:space:]]+/', ' ')->trim();
+        $terms = array_unique($searchQuery->split(' '));
+
+        // ignore the search terms that are too short
+        return array_filter($terms, function ($term) {
+            return 2 <= $term->length();
+        });
+    }
 }

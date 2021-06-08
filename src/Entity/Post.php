@@ -51,13 +51,23 @@ class Post
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post", orphanRemoval=true, cascade={"persist"}, cascade={"persist"})
      */
     private $comments;
+
+    /**
+     * @var Tag[]|Collection
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", cascade={"persist"})
+     * @ORM\JoinTable(name="post_tag")
+     * @ORM\OrderBy({"name": "ASC"})
+     */
+    private $tags;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,5 +175,24 @@ class Post
         }
 
         return $this;
+    }
+
+    public function addTag(Tag ...$tags): void
+    {
+        foreach ($tags as $tag) {
+            if (!$this->tags->contains($tag)) {
+                $this->tags->add($tag);
+            }
+        }
+    }
+
+    public function removeTag(Tag $tag): void
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    public function getTags(): Collection
+    {
+        return $this->tags;
     }
 }

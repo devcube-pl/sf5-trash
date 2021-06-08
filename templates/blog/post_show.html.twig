@@ -12,28 +12,7 @@
 
     {{ post.content|markdown_to_html|sanitize_html }}
 
-    <p class="post-tags">
-        <a href="/?tag=adipiscing"
-           class="label label-default"
-        >
-            <i class="fa fa-tag"></i> adipiscing
-        </a>
-        <a href="/?tag=consectetur"
-           class="label label-default"
-        >
-            <i class="fa fa-tag"></i> consectetur
-        </a>
-        <a href="/?tag=labore"
-           class="label label-default"
-        >
-            <i class="fa fa-tag"></i> labore
-        </a>
-        <a href="/?tag=voluptate"
-           class="label label-default"
-        >
-            <i class="fa fa-tag"></i> voluptate
-        </a>
-    </p>
+    {{ include('blog/_post_tags.html.twig') }}
 
     <div id="post-add-comment" class="well">
         {% if app.user %}
@@ -52,54 +31,21 @@
         <i class="fa fa-comments" aria-hidden="true"></i> 5 komentarzy
     </h3>
 
-    <div class="row post-comment">
-        <a name="comment_5"></a>
-        <h4 class="col-sm-3">
-            <strong>John Doe</strong> commented on
-            <strong>Dec 5, 2017, 4:36 PM</strong>
-        </h4>
-        <div class="col-sm-9">
-            <p>Diatrias tolerare tanquam noster caesium. Pellentesque vitae velit ex. Ubi est barbatus nix. Sunt seculaes transferre talis camerarius fluctuies. Bassus fatalis classiss virtualiter transferre de flavum. Sunt torquises imitari velox mirabilis medicinaes. Silva de secundus galatae demitto quadra. Ut eleifend mauris et risus ultrices egestas.</p>
+    {% for comment in post.comments %}
+        <div class="row post-comment">
+            <a name="comment_{{ comment.id }}"></a>
+            <h4 class="col-sm-3">
+                <strong>{{ comment.author.fullName }}</strong> commented on
+                <strong>{{ comment.publishedAt|format_post_date('d.m.Y, H:i') }}</strong>
+            </h4>
+            <div class="col-sm-9">
+                {{ comment.content|markdown_to_html|sanitize_html }}
+            </div>
         </div>
-    </div>
-    <div class="row post-comment">
-        <a name="comment_4"></a>
-        <h4 class="col-sm-3">
-            <strong>John Doe</strong> commented on
-            <strong>Dec 5, 2017, 4:36 PM</strong>
-        </h4>
-        <div class="col-sm-9">
-            <p>Ut eleifend mauris et risus ultrices egestas. Era brevis ratione est. Potus sensim ad ferox abnoba. Nunc viverra elit ac laoreet suscipit. Ut suscipit posuere justo at vulputate. Teres talis saepe tractare de camerarius flavum sensorem. Aliquam sodales odio id eleifend tristique. Sunt seculaes transferre talis camerarius fluctuies. Sunt torquises imitari velox mirabilis medicinaes. Eposs sunt solems de superbus fortis. Sunt accentores vitare salvus flavum parses.</p>
+    {% else %}
+        <div class="post-comment">
+            <p>Nikt jeszcze nie skomentował - bądź pierwszy!</p>
         </div>
-    </div>
-    <div class="row post-comment">
-        <a name="comment_3"></a>
-        <h4 class="col-sm-3">
-            <strong>John Doe</strong> commented on
-            <strong>Dec 5, 2017, 4:36 PM</strong>
-        </h4>
-        <div class="col-sm-9">
-            <p>Sunt accentores vitare salvus flavum parses. Urna nisl sollicitudin id varius orci quam id turpis. Potus sensim ad ferox abnoba. Silva de secundus galatae demitto quadra. Eros diam egestas libero eu vulputate risus. Pellentesque et sapien pulvinar consectetur.</p>
-        </div>
-    </div>
-    <div class="row post-comment">
-        <a name="comment_2"></a>
-        <h4 class="col-sm-3">
-            <strong>John Doe</strong> commented on
-            <strong>Dec 5, 2017, 4:36 PM</strong>
-        </h4>
-        <div class="col-sm-9">
-            <p>Curabitur aliquam euismod dolor non ornare. Mauris dapibus risus quis suscipit vulputate. Pellentesque et sapien pulvinar consectetur. Ut suscipit posuere justo at vulputate. Nunc viverra elit ac laoreet suscipit. Aliquam sodales odio id eleifend tristique. Vae humani generis. Silva de secundus galatae demitto quadra. Ubi est barbatus nix.</p>
-        </div>
-    </div>
-    <div class="row post-comment">
-        <a name="comment_1"></a>
-        <h4 class="col-sm-3">
-            <strong>John Doe</strong> commented on
-            <strong>Dec 5, 2017, 4:36 PM</strong>
-        </h4>
-        <div class="col-sm-9">
-            <p>Eros diam egestas libero eu vulputate risus. Aliquam sodales odio id eleifend tristique. Nulla porta lobortis ligula vel egestas. Eposs sunt solems de superbus fortis. Sunt torquises imitari velox mirabilis medicinaes. Lorem ipsum dolor sit amet consectetur adipiscing elit. Sunt seculaes transferre talis camerarius fluctuies.</p>
-        </div>
-    </div>
+    {% endfor %}
+
 {% endblock %}
