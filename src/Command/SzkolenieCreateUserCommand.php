@@ -4,8 +4,10 @@ namespace App\Command;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Utils\UserCommandValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -36,6 +38,9 @@ class SzkolenieCreateUserCommand extends Command
      */
     private $passwordHasher;
 
+    /**
+     * @var UserCommandValidator
+     */
     private $validator;
 
     /**
@@ -47,13 +52,15 @@ class SzkolenieCreateUserCommand extends Command
     public function __construct(
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        UserCommandValidator $validator
     ) {
         parent::__construct();
 
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
         $this->passwordHasher = $passwordHasher;
+        $this->validator = $validator;
     }
 
     protected function configure(): void
@@ -72,14 +79,14 @@ class SzkolenieCreateUserCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $username = $input->getArgument('username');
-        $email = $this->io->ask('Podaj maila', null);
-        $password = $this->io->askHidden('Hasło (znaki będą ukryte)', null);
-        $fullName = $this->io->ask('Imię i nazwisko', null);
+        $this->validateUsername($username);
+
+        $email = $this->io->ask('Email', null, [$this->validator, 'validateEmail']);
+        $password = $this->io->askHidden('Hasło (znaki będą ukryte)', [$this->validator, 'validatePassword']);
+        $fullName = $this->io->ask('Imię i nazwisko', null, [$this->validator, 'validateFullName']);
         $isAdmin = $input->getOption('admin');
 
-        /**
-         * @todo Walidacja
-         */
+        $this->validateEmail($email);
 
         $user = new User();
         $user->setFullName($fullName);
@@ -101,5 +108,25 @@ class SzkolenieCreateUserCommand extends Command
         );
 
         return Command::SUCCESS;
+    }
+
+    private function validateUsername($username)
+    {
+        $this->validator->validateUsername($username);
+
+        $existingUser = $this->userRepository->findOneBy(['username' => $username]);
+
+        if (null !== $existingUser) {
+            throw new RuntimeException(sprintf('Istnieje już użytkownik z nazwą "%s".', $username));
+        }
+    }
+
+    private function validateEmail($email)
+    {
+        $existingEmail = $this->userRepository->findOneBy(['email' => $email]);
+
+        if (null !== $existingEmail) {
+            throw new RuntimeException(sprintf('Istnieje już użytownik o mailu "%s".', $email));
+        }
     }
 }
