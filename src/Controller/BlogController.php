@@ -19,7 +19,6 @@ class BlogController extends AbstractController
     public function index(PostRepository $postRepository, $page)
     {
         $paginator = $postRepository->findLatest($page);
-//        dump($posts);
 
         return $this->render(
             'blog/index.html.twig',
@@ -30,13 +29,15 @@ class BlogController extends AbstractController
     /**
      * @Route("/posts/{slug}", name="blog_post")
      */
-    public function postShow(Post $post)
+    public function postShow(Post $post, Request $req)
     {
         return $this->render(
             'blog/post_show.html.twig',
             ['post' => $post]
         );
     }
+
+
 
     /**
      * @Route("/search")

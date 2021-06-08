@@ -19,6 +19,10 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            user_checker: App\Security\UserChecker
+
+#            login_throttling:
+#                max_attempts: 3
 
             form_login:
                 check_path: security_login

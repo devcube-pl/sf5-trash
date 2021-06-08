@@ -123,6 +123,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @return false|int|string
+     */
+    public function isAdmin()
+    {
+        return false !== array_search('ROLE_ADMIN', $this->roles);
+    }
+
+    /**
      * @see UserInterface
      */
     public function getRoles(): array
