@@ -23,7 +23,7 @@
     <div class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="container">
             <div class="navbar-header col-md-3 col-lg-2">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="{{ path('homepage') }}">
                     Szkolenie SF5
                 </a>
 
@@ -63,8 +63,12 @@
                             <span class="sr-only">Wybierz język</span>
                         </a>
                         <ul class="dropdown-menu locales" role="menu" aria-labelledby="locales">
-                            <li aria-checked="false" role="menuitem"><a href="/en/">English <small>en</small></a></li>
-                            <li aria-checked="true" class="active" role="menuitem"><a href="/pl/">Polski <small>pl</small></a></li>
+                            <li aria-checked="true" {% if app.request.locale == 'en' %}class="active"{% endif %} role="menuitem">
+                                <a href="{{ path('homepage', {'_locale': 'en'}) }}">English <small>en</small></a>
+                            </li>
+                            <li aria-checked="true" {% if app.request.locale == 'pl' %}class="active"{% endif %} role="menuitem">
+                                <a href="{{ path('homepage', {'_locale': 'pl'}) }}">Polski <small>pl</small></a>
+                            </li>
                         </ul>
                     </li>
 

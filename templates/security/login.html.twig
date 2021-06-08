@@ -6,14 +6,14 @@
 
     {% if error %}
     <div class="alert alert-danger">
-        {{ error.messageKey }}
+        {{ error.messageKey|trans(error.messageData, 'security') }}
     </div>
     {% endif %}
 
     <div class="well">
         <form action="{{ path('security_login') }}" method="post">
             <fieldset>
-                <legend><i class="fa fa-lock" aria-hidden="true"></i> Bezpieczne logowanie</legend>
+                <legend><i class="fa fa-lock" aria-hidden="true"></i> {{ 'form.login.title'|trans }}</legend>
                 <div class="form-group">
                     <label for="username">Użytkownik</label>
                     <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"/>
