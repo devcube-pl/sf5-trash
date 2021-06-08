@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,6 +39,40 @@ class BlogController extends AbstractController
         );
     }
 
+    /**
+     * @Route("/comment/{postSlug/new", methods="POST", name="comment_new")
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     * @ParamConverter("post", options={"mapping": {"postSlug": "slug"}})
+     * @param  Request  $request
+     * @param  Post  $post
+     */
+    public function commentNew(Request $request, Post $post)
+    {
+        $comment = new Comment();
+        // za pomoca metody getUser() mozna pobrac z AbstractController aktualnego usera
+        $comment->setAuthor($this->getUser());
+        $post->addComment($comment);
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // entity managera mozna tez pobrac z helpera getDoctrine w AbstractController
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirectToRoute('blog_post', ['slug' => $post->getSlug()]);
+        }
+
+        // moze jednak nie bedziemy przekierowywac tylko zrobimy osobny widok
+        $this->renderForm(
+            'blog/comment_form_error.html.twig',
+            [
+                'form' => $form
+            ]
+        );
+    }
 
 
     /**
