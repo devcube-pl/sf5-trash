@@ -44,11 +44,13 @@
                             <i class="fa fa-home" aria-hidden="true"></i> Strona główna
                         </a>
                     </li>
+                    {% if is_granted('IS_ANONYMOUS') %}
                     <li>
-                        <a href="/login">
+                        <a href="{{ path('security_login') }}">
                             <i class="fa fa-user" aria-hidden="true"></i> Logowanie
                         </a>
                     </li>
+                    {% endif %}
                     <li>
                         <a href="/search"> <i class="fa fa-search"></i> Szukajka</a>
                     </li>
@@ -65,6 +67,14 @@
                             <li aria-checked="true" class="active" role="menuitem"><a href="/pl/">Polski <small>pl</small></a></li>
                         </ul>
                     </li>
+
+                    {% if app.user %}
+                    <li>
+                        <a href="{{ path('security_logout') }}">
+                            <i class="fa fa-user" aria-hidden="true"></i> Wyloguj
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

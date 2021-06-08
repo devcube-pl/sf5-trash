@@ -11,14 +11,23 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: email
+                property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+            security: false # wylacza calkowicie uwierzytelnianie
         main:
             lazy: true
             provider: app_user_provider
+
+            form_login:
+                check_path: security_login
+                login_path: security_login
+                default_target_path: homepage
+
+            logout:
+                path: security_logout
+                target: homepage
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

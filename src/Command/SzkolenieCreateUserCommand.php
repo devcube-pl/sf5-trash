@@ -48,6 +48,7 @@ class SzkolenieCreateUserCommand extends Command
      * @param  EntityManagerInterface  $entityManager
      * @param  UserRepository  $userRepository
      * @param  UserPasswordHasherInterface  $passwordHasher
+     * @param  UserCommandValidator $validator
      */
     public function __construct(
         EntityManagerInterface $entityManager,
