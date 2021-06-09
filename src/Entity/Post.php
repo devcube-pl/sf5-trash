@@ -10,12 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use App\Controller\PostApiController;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ApiResource(
  *     collectionOperations={
- *          "get"={"normalization_context"={"groups"="post:list"}}
+ *          "get"={"normalization_context"={"groups"="post:list"}},
+ *          "post"={"controller"=PostApiController::class, "security"="is_granted('ROLE_ADMIN')"}
  *     },
  *     itemOperations={
  *          "get"={"normalization_context"={"groups"="post:item"}}
@@ -70,7 +72,7 @@ class Post
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
-     * @ApiSubresource
+     * @ApiSubresource()
      * @Groups({"post:list", "post:item"})
      */
     private $author;
@@ -219,5 +221,14 @@ class Post
     public function getTags(): Collection
     {
         return $this->tags;
+    }
+
+    public function getFormArray()
+    {
+        return [
+            'title' => $this->title,
+            'summary' => $this->summary,
+            'content' => $this->content
+        ];
     }
 }
