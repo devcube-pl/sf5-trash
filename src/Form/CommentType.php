@@ -18,8 +18,6 @@ class CommentType extends AbstractType
                       'label' => 'Wpisz treść komentarza',
                       'help' => 'Komentarze nie spełniające naszych wyśrubowanych standardów zostaną usunięte!!!'
                   ]
-            )
-            ->add('username', TextType::class)
-            ->add('fullName', TextType::class);
+            );
     }
 }

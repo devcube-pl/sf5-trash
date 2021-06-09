@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Event\CommentCreatedEvent;
 use App\Form\CommentType;
 use App\Repository\PostRepository;
 use App\Repository\TagRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -58,8 +60,11 @@ class BlogController extends AbstractController
      * @IsGranted("IS_AUTHENTICATED_FULLY")
      * @ParamConverter("post", options={"mapping": {"postSlug": "slug"}})
      */
-    public function commentNew(Request $request, Post $post)
-    {
+    public function commentNew(
+        Request $request,
+        Post $post,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $comment = new Comment();
         // za pomoca metody getUser() mozna pobrac z AbstractController aktualnego usera
         $comment->setAuthor($this->getUser());
@@ -73,6 +78,8 @@ class BlogController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();
+
+            $eventDispatcher->dispatch(new CommentCreatedEvent($comment));
 
             return $this->redirectToRoute('blog_post', ['slug' => $post->getSlug()]);
         }
