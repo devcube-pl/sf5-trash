@@ -7,8 +7,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @ApiResource(
+ *     collectionOperations={
+ *          "get"={"normalization_context"={"groups"="post:list"}}
+ *     },
+ *     itemOperations={
+ *          "get"={"normalization_context"={"groups"="post:item"}}
+ *     }
+ * )
  */
 class Post
 {
@@ -16,37 +28,50 @@ class Post
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"post:list", "post:item"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"post:list", "post:item"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     *
+     * @Groups({"post:list"})
      */
     private $slug;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"post:list"})
      */
     private $summary;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"post:item"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @Groups({"post:list", "post:item"})
      */
     private $publishedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
+     * @ApiSubresource
+     * @Groups({"post:list", "post:item"})
      */
     private $author;
 
@@ -58,7 +83,7 @@ class Post
     /**
      * @var Tag[]|Collection
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", cascade={"persist"}, fetch="LAZY")
      * @ORM\JoinTable(name="post_tag")
      * @ORM\OrderBy({"name": "ASC"})
      */

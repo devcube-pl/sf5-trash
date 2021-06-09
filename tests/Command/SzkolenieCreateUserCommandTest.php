@@ -18,6 +18,9 @@ class SzkolenieCreateUserCommandTest extends KernelTestCase
         'full-name' => 'Uzytkownik Testowy',
     ];
 
+    /**
+     * Ciekawostka
+     */
     protected function setUp(): void
     {
         exec('stty 2>&1', $output, $exitcode);

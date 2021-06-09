@@ -32,11 +32,11 @@ class UserFixtures extends Fixture
     {
         return [
             // $userData = [$fullname, $username, $password, $email, $roles];
-            ['Jakub Testowy', 'kuba', '123456', 'kuba@example.com', ['ROLE_ADMIN']],
-            ['Jan Kowalski', 'jan_admin', 'kitten', 'jane_admin@example.com', ['ROLE_ADMIN']],
-            ['Tom Doe', 'tom_admin', 'kitten', 'tom_admin@example.com', ['ROLE_ADMIN']],
-            ['Kate Born', 'kate_admin', 'kitten', 'kate_admin@example.com', ['ROLE_ADMIN']],
-            ['John Teapot', 'john_user', 'kitten', 'john_user@example.com', ['ROLE_USER']],
+            ['Jakub Testowy', 'kuba', '123456', 'kuba@example.com', ['ROLE_ADMIN'], md5(random_int(1, 1000).microtime())],
+            ['Jan Kowalski', 'jan_admin', 'kitten', 'jane_admin@example.com', ['ROLE_ADMIN'], md5(random_int(1, 1000).microtime())],
+            ['Tom Doe', 'tom_admin', 'kitten', 'tom_admin@example.com', ['ROLE_ADMIN'], null],
+            ['Kate Born', 'kate_admin', 'kitten', 'kate_admin@example.com', ['ROLE_ADMIN'], null],
+            ['John Teapot', 'john_user', 'kitten', 'john_user@example.com', ['ROLE_USER'], md5(random_int(1, 1000).microtime())],
         ];
     }
 
@@ -51,13 +51,14 @@ class UserFixtures extends Fixture
 
     private function loadUsers(ObjectManager $manager): void
     {
-        foreach (self::getUserData() as [$fullname, $username, $password, $email, $roles]) {
+        foreach (self::getUserData() as [$fullname, $username, $password, $email, $roles, $apiToken]) {
             $user = new User();
             $user->setFullName($fullname);
             $user->setUsername($username);
             $user->setPassword($this->passwordHasher->hashPassword($user, $password));
             $user->setEmail($email);
             $user->setRoles($roles);
+            $user->setApiToken($apiToken);
 
             $manager->persist($user);
             $this->addReference($username, $user);

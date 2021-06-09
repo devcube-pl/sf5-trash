@@ -11,12 +11,25 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 // DON'T forget the following use statement!!!
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  * @UniqueEntity("email", message="Posiadasz już konto w naszym serwisie, weź się zaloguj gościu")
  * @UniqueEntity("username", message="Podana nazwa user jest już zajęta")
+ *
+ * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     collectionOperations={
+ *          "get"={"normalization_context"={"groups"="user:list"}}
+ *     },
+ *     itemOperations={
+ *          "get"={"normalization_context"={"groups"="user:item"}}
+ *     }
+ * )
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -24,6 +37,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"user:list", "user:item"})
      */
     private $id;
 
@@ -46,6 +61,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      * @Assert\Length(min=3, max=100)
      * @var string
+     *
+     * @Groups({"user:list", "user:item"})
      */
     private $fullName;
 
@@ -66,6 +83,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="author", orphanRemoval=true)
      */
     private $posts;
+
+    /**
+     * @ORM\Column(type="string", nullable="true")
+     * @var string|null
+     */
+    private $apiToken;
 
     public function __construct()
     {
@@ -224,6 +247,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    /**
+     * @param  string|null  $apiToken
+     * @return User
+     */
+    public function setApiToken(?string $apiToken): User
+    {
+        $this->apiToken = $apiToken;
         return $this;
     }
 }
