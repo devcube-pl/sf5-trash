@@ -1,3 +1,46 @@
 form:
   login:
     title: 'Bezpieczne logowanie'
+'post.add_comment': 'Dodaj komentarz'
+label:
+  title: 'Tytuł'
+  summary: 'Zajawka'
+  content: 'Treść'
+  published_at: 'Data publikacji'
+  actions: 'Opcje'
+  create_post: 'Dodaj post'
+  save_and_create_new: 'Zapisz i dodaj kolejny'
+  tags: 'Znaczniki'
+  cancel: 'Anuluj'
+  delete_post: 'Usuń post'
+
+post:
+  search_for: 'Wyszukaj'
+  search_no_results: 'Brak wyników'
+
+menu:
+  admin: 'Administracja'
+  back_to_blog: 'Wróć na blog'
+
+title:
+  post_list: 'Lista postów'
+  edit_post: 'Edycja posta'
+  post_new: 'Tworzenie posta'
+
+action:
+  create_post: 'Dodaj post'
+  show: 'Pokaż'
+  edit: 'Edytuj'
+  delete_post: 'Usuń post'
+  edit_contents: 'Edytuj post'
+  save: 'Zapisz'
+  back_to_list: 'Wróć do listy'
+  show_post: 'Zobacz post'
+
+delete_post_modal:
+  title: 'Czy na pewno chcesz usunąć ten artykuł?'
+  body: 'Ta akcja nie może zostać cofnięta.'
+
+notification:
+  comment_created: 'Ktos skomentowal Twoj post'
+  comment_created.description: 'Twój post "%title%" otrzymał nowy komentarz. Możesz przeczytać komentarz <a href="%link%">pod tym adresem</a>'

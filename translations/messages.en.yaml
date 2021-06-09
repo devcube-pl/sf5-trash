@@ -1,0 +1,50 @@
+form:
+  login:
+    title: 'Sign in'
+'Szukajka': 'Search'
+'Logowanie': 'Sign in'
+'Strona główna': 'Homepage'
+'post.add_comment': 'Add your comment'
+
+post:
+  search_for: 'Wyszukaj'
+  search_no_results: 'Brak wyników'
+
+menu:
+  admin: 'Administracja'
+  back_to_blog: 'Wróć na blog'
+
+label:
+  title: 'Title'
+  summary: 'Summary'
+  content: 'Content'
+  published_at: 'Publication date'
+  actions: 'Opcje'
+  create_post: 'Dodaj post'
+  save_and_create_new: 'Zapisz i dodaj kolejny'
+  tags: 'Znaczniki'
+  cancel: 'Anuluj'
+  delete_post: 'Usuń post'
+
+title:
+  post_list: 'Posts'' list'
+  edit_post: 'Edycja posta'
+  post_new: 'Tworzenie posta'
+
+action:
+  create_post: 'Dodaj post'
+  show: 'Pokaż'
+  edit: 'Edytuj'
+  delete_post: 'Usuń post'
+  edit_contents: 'Edytuj post'
+  save: 'Zapisz'
+  back_to_list: 'Wróć do listy'
+  show_post: 'Zobacz post'
+
+delete_post_modal:
+  title: 'Czy na pewno chcesz usunąć ten artykuł?'
+  body: 'Ta akcja nie może zostać cofnięta.'
+
+notification:
+  comment_created: 'Your post received a comment!'
+  comment_created.description: 'Your post "%title%" has received a new comment. You can read the comment by following <a href="%link%">this link</a>'

@@ -38,12 +38,20 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-
-                    <li>
-                        <a href="/">
-                            <i class="fa fa-home" aria-hidden="true"></i> Strona główna
-                        </a>
-                    </li>
+                    {% block header_navigation_links %}
+                        <li>
+                            <a href="{{ path('homepage') }}">
+                                <i class="fa fa-home" aria-hidden="true"></i> {{ 'Strona główna'|trans }}
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('admin_post_index') }}">
+                                    <i class="fa fa-lock" aria-hidden="true"></i> {{ 'Administracja'|trans }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endblock %}
                     {% if is_granted('IS_ANONYMOUS') %}
                     <li>
                         <a href="{{ path('security_login') }}">
@@ -86,6 +94,13 @@
 </header>
 
 <div class="container body-container">
+    <div class="row">
+        <div class="col-sm-12">
+            {% block action_buttons %}
+
+            {% endblock %}
+        </div>
+    </div>
     <div class="row">
         <div id="main" class="col-sm-12">
             {% for message in app.flashes('info') %}

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/build/admin.css" />
+{% endblock %}
+
+{% block header_navigation_links %}
+    <li>
+        <a href="{{ path('homepage') }}">
+            <i class="fa fa-home" aria-hidden="true"></i> {{ 'menu.back_to_blog'|trans }}
+        </a>
+    </li>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/build/admin.js"></script>
+{% endblock %}
