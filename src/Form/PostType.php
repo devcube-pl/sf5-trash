@@ -36,11 +36,12 @@ class PostType extends AbstractType
             ->add('summary', TextareaType::class)
             ->add('content', null, ['attr' => ['rows' => 20]]);
 
-        //if (isset($options['attr']['isHtml'])) { // to jest tylko pod atrybuty html!
         if ($options['isHtml']) {
             $builder
-                ->add('publishedAt', DateTimeType::class)
-                ->add('tags', TextType::class);
+                ->add('publishedAt', DateTimePickerType::class)
+                ->add('tags', TagsInputType::class, [
+                    'required' => false
+                ]);
         }
 
         $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) {
@@ -58,6 +59,7 @@ class PostType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            //'data_class' => Post::class,
             'csrf_protection' => true,
             'isHtml' => true
         ]);
